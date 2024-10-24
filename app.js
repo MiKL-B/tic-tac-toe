@@ -3,6 +3,7 @@ div_board.classList.add("board");
 
 const board = ["", "", "", "", "", "", "", "", ""];
 let turn = false;
+let gameActive = true;
 
 function create_board() {
   for (let i = 0; i < board.length; i++) {
@@ -54,13 +55,20 @@ function checkVictory(arr) {
 }
 
 function play(arr, index) {
-  if (arr[index].includes("x") || arr[index].includes("o") || checkVictory(board))
+  if (!gameActive || arr[index].includes("x") || arr[index].includes("o"))
     return;
-
+  
   arr[index] = getTurn();
   document.getElementById(index).innerText = getTurn();
+  
+  if (checkVictory(board)){
+    gameActive = false;
+    return;
+  }
+  
   changeTurn();
 }
+
 document.body.addEventListener("click", (event) => {
   if (event.target.classList == "box") {
     play(board, event.target.id);
